@@ -1,0 +1,49 @@
+version: '2'
+
+services:
+  mysql:
+    image: percona:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: username
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: face_app_db
+    volumes:
+      - ./db/data:/var/lib/mysql
+      - ./provision/mysql/init.db:/docker-entrypoint-initdb.d
+    ports:
+      - 3306:3306
+  # web:
+  #   image: nginx
+  #   restart: always
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ${SRC_ROOT}:/app
+  #     - ./nginx/sites/${ENV}.conf:/etc/nginx/conf.d/default.conf
+  #     - ./nginx/${ENV}.default.conf:/etc/nginx/${ENV}.default.conf
+  #   links:
+  #     - php
+
+  phpmyadmin:
+    hostname: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - mysql
+    ports:
+      - 8085:80
+    environment:     
+      PMA_ARBITRARY: 1
+ 
+      
+  # php:
+  #   extends:
+  #     file: base-php/base-php.yml
+  #     service: base-php
+  #   restart: always
+  #   working_dir: /app
+  #   volumes:
+  #     - ${SRC_ROOT}:/app
+  #   links:
+  #     - db
