@@ -13,6 +13,11 @@
 |
 */
 
+$router->get('/listPosts','postsController@index');
+$router->post('/listPosts/create','postsController@create');
+
+
+
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
