@@ -9,15 +9,19 @@ use Illuminate\Support\Facades\Date;
 
 class postsController extends Controller
 {
-   
-    public function index()
+
+/*
+Run -> php -S localhost:8000 -t public
+
+*/
+    public function getPosts()
     {
         $posts = Post::all();     //var posts vai guardar todos os dados do modelo (posts) devido ao all()
         return response()->json($posts); // retorna uma resposta dos dados no formato json
     }
 
    
-    public function create(Request $request)
+    public function addNewPosts(Request $request)
     {
         //1º validation
         $this->validate($request, [
@@ -32,33 +36,20 @@ class postsController extends Controller
     }
 
  
-    public function show($id)
+    public function get_by_user($user_id)
     {
         //show item by id
 
-        $post = Post::find($id); 
-
-        return response()->json($post);
+        $posts = Post::where(['id_user'=>$user_id])->get(); //return if not found empty, if found return a objet
+        return response()->json($posts);
 
     }
 
-    
-    public function edit($id)
-    {
-        //
-    }
 
-   
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-  
-    public function delete($id)
+    public function remove_by_user($post_id)
     {
         //erase by id
-        $post = Post::find($id);
+        $post = Post::where(['id'=>$post_id])->get();
         $post->delete();
         return response()->json('Post deleted successfully!'); 
     }
