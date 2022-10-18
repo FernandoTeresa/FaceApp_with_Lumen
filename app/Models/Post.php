@@ -14,4 +14,18 @@ class Post extends Model
         $this->date = date("Y/m/d");
         return parent::save($options);
     }
+
+
+    public function user(){
+
+        return $this->belongsTo(User::class, 'id_user');
+    }
+
+    public function comments(){
+
+        return $this->hasMany(Comment::class, 'id_post')->with('user');
+    }
+
+
+
 }

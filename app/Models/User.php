@@ -24,7 +24,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     ];
 
 
-    public function save($options = []){
+    public function save($options = [])
+    {
         //make the hash from the options argument who cames by the body of the request
         $this->password = Hash::make($options['raw_password']);
         return parent::save($options);
@@ -39,6 +40,13 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         return [];
     }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class, 'id_user')->with('comments');
+    }
+
+
 
 
 }

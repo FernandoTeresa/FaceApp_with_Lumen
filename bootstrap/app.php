@@ -73,17 +73,17 @@ $app->configure('app');
 */
 
 $app->routeMiddleware([
-    'jwt-auth' => \Tymon\JWTAuth\Http\Middleware\Authenticate::class,
+    'jwt.verify' => \Tymon\JWTAuth\Http\Middleware\Authenticate::class,
     'sync-origin' => App\Http\Middleware\SyncOriginMiddleware::class,
 ]);
 
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 
 
-$app->middleware([
-    App\Http\Middleware\ExampleMiddleware::class,
-    App\Http\Middleware\CorsMiddleware::class
-]);
+// $app->middleware([
+
+//     App\Http\Middleware\CorsMiddleware::class
+// ]);
 
 // $app->routeMiddleware([
 //     'auth' => App\Http\Middleware\Authenticate::class,
@@ -121,7 +121,7 @@ $app->register(App\Providers\EventServiceProvider::class);
 
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
-], function ($router) {
+], function ($app) {
     require __DIR__.'/../routes/web.php';
 });
 

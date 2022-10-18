@@ -17,9 +17,9 @@ class CreatePostsTable extends Migration
             $table->id();
             $table->string('title',100);
             $table->longText('content');
-            $table->date('date');
             $table->foreignId('id_user')->references('id')->on('users');
-            $table->timestamps();
+            $table->timestamp('updated_at')->nullable()->default(DB::raw('NULL ON UPDATE CURRENT_TIMESTAMP'));
+            $table->timestamp('created_at')->useCurrent();
         });
     }
 

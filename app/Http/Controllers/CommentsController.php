@@ -19,8 +19,8 @@ class CommentsController extends Controller
     {
         //addnewcomments
         $this->validate($request, [
-            'content'=> 'required',
-            'id_user'=> 'required|exists:users,id',
+            'content' => 'required',
+            'id_user' => 'required|exists:users,id',
             'id_post' => 'required|exists:posts,id'
         ]);
         $comments = new Comment($request->all());

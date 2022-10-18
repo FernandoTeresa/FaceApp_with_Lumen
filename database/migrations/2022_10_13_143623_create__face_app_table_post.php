@@ -19,7 +19,8 @@ class CreateFaceAppTablePost extends Migration
             $table->string('password');
             $table->string('first_name',50);
             $table->string('last_name',50);
-            $table->timestamps();
+            $table->timestamp('updated_at')->nullable()->default(DB::raw('NULL ON UPDATE CURRENT_TIMESTAMP'));
+            $table->timestamp('created_at')->useCurrent();
         
         });
     }

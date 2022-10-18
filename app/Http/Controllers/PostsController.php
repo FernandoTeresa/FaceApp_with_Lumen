@@ -16,7 +16,7 @@ Run -> php -S localhost:8000 -t public
 */
     public function getPosts()
     {
-        $posts = Post::all();     //var posts vai guardar todos os dados do modelo (posts) devido ao all()
+        $posts = Post::where([])->with('comments')->with('user')->get();     //var posts vai guardar todos os dados do modelo (posts) devido ao all()
         return response()->json($posts); // retorna uma resposta dos dados no formato json
     }
 
@@ -40,7 +40,7 @@ Run -> php -S localhost:8000 -t public
     {
         //show item by id
 
-        $posts = Post::where(['id_user'=>$user_id])->get(); //return if not found empty, if found return a objet
+        $posts = Post::where(['id_user'=>$user_id])->with('comments')->with('user')->get(); //return if not found empty, if found return a objet
         return response()->json($posts);
 
     }
@@ -49,8 +49,16 @@ Run -> php -S localhost:8000 -t public
     public function remove_by_user($post_id)
     {
         //erase by id
-        $post = Post::where(['id'=>$post_id])->get();
-        $post->delete();
+        $user = auth()->user();
+        $post = Post::where(['id'=>$post_id, 'id_user' =>$user->id])->first();
+        if ($post != null){
+            $post->delete();
+        }else{
+            return response()->json([
+                'status' => '404',
+                'message' => 'Not Found'
+            ]);
+        }
         return response()->json('Post deleted successfully!'); 
     }
 }

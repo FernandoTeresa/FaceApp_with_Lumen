@@ -7,9 +7,12 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
+use Illuminate\Validation\Rules\Password;
+
 
 class usersController extends Controller
 {
+
 
    
     public function getUser($id)
@@ -20,22 +23,33 @@ class usersController extends Controller
     }
 
    
-    public function login(Request $request)
-    {
-        //
-        $this->validate($request, [
-            'username' => 'required',
-            'password' => 'required'
-        ]);
+    // public function login(Request $request)
+    // {
+    //     //
+    //     $this->validate($request, [
+    //         'username' => 'required',
+    //         'password' => 'required'
+    //     ]);
 
-        $user = User::where('username',$request->input('username'))->first();
+    //     $user = User::where('username',$request->input('username'))->first();
 
-        if (Hash::check($request->input('password'), $user->password)){
-            return response()->json(['status' => 'success'],200);
-        }else{
-            return response()->json(['status' => 'fail',401]);
-        }
-    }
+    //     if(!isset($user)){
+    //         return response()->json(
+    //             [
+    //                 'status' => false,
+    //                 'message' => 'User does not exist'
+    //             ]
+    //         );
+    //     }
+
+    //     if (Hash::check($request->input('password'), $user->password)){
+    //         return response()->json(['status' => 'success'],200);
+    //     }else{
+    //         return response()->json(['status' => 'fail',401]);
+    //     }
+
+        
+    // }
 
    
     public function newUser(Request $request)
@@ -48,30 +62,51 @@ class usersController extends Controller
             'last_name' => 'required',
             'email' => 'required'
         ]);
-        // $username = $request->input('username');
-        // $password = Hash::make($request->input('password'));
-        // $fname = $request->input('first_name');
-        // $lname = $request->input('last_name');
-        // $email = $request->input('email');
-
-        // $regUser = User::create([
-        //     'username' => $username,
-        //     'password' => $password,
-        //     'first_name' => $fname,
-        //     'last_name' => $lname,
-        //     'email' => $email
-        // ]);
-
-        // if($regUser){
-        //     return response()->json($regUser,200);
-        // }else{
-        //     return response()->json(['status'=>'fail'],401);
-        // }
-
-
+ 
         $user = new User($request->all());
         $user->save($request->all());
         return response()->json($user,200);
     }
+
+
+
+
+
+
+    public function updateUser(Request $request, $user_id)
+    {
+        $payload = $request->all();
+
+        $this->validate($request, [
+            'raw_password'=> ['required',Password::min(8)],
+            'raw_password_equal' =>
+            [
+                'required',
+                function ($attribute, $value, $fail) use ($payload) {
+
+                    if($payload['raw_password'] != $value){
+                        $fail('Passwords dont match');
+                    }
+                },Password::min(8)
+            ],
+
+            'first_name'=> 'required',
+            'last_name' => 'required',
+
+        ]);
+
+        $user = User::where(['id' =>$user_id])->first();
+
+        echo '<pre>'.print_r($user,true).'</pre>';die();
+
+        $user->update(array('password'=>'raw_password'));
+
+
+
+
+
+        
+    }
+
 
 }

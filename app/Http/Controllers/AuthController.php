@@ -9,10 +9,7 @@ use  App\Models\User;
 class AuthController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login', 'refresh', 'logout']]);
-    }
+
  
     public function login(Request $request)
     {
@@ -54,10 +51,11 @@ class AuthController extends Controller
   
     protected function respondWithToken($token)
     {
+        $user=User::where(['id'=>auth()->user()->id])->with('posts')->first();
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'user' => auth()->user(),
+            'user' => $user,
             'expires_in' => auth()->factory()->getTTL() * 60 * 24
         ]);
     }
