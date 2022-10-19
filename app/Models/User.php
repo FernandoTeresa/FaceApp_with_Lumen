@@ -11,6 +11,8 @@ use Laravel\Lumen\Auth\Authorizable;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
+use Illuminate\Support\ServiceProvider;
+
 class User extends Model implements AuthenticatableContract, AuthorizableContract, JWTSubject
 {
     use Authenticatable, Authorizable, HasFactory;
@@ -18,18 +20,45 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $fillable=[
         'username','password', 'first_name', 'last_name','email'
     ];
+    
 
     protected $hidden = [
         'password',
     ];
 
 
-    public function save($options = [])
+
+    // protected static function boot()
+    // {
+    //     parent::boot();
+    
+    //     self::creating(function($model){
+    //         $model->password = Hash::make($model->password);
+    //     });
+
+    // }
+
+    public function save(array $options = [])
     {
-        //make the hash from the options argument who cames by the body of the request
-        $this->password = Hash::make($options['raw_password']);
-        return parent::save($options);
+        if(isset($options['password']))
+        {
+            $this->password = Hash::make($options['password']);
+        }
+        if(!parent::save($options)){
+            return false;
+        }
+        return true;
     }
+
+
+
+    // public function save($options=[])
+    // {
+    //     //make the hash from the options argument who cames by the body of the request
+    //     $this->password = Hash::make($options['raw_password']);
+
+    //     return parent::save($options);
+    // }
 
     public function getJWTIdentifier()
     {

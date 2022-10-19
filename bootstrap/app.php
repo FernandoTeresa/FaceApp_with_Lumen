@@ -80,10 +80,10 @@ $app->routeMiddleware([
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 
 
-// $app->middleware([
+$app->middleware([
 
-//     App\Http\Middleware\CorsMiddleware::class
-// ]);
+    App\Http\Middleware\CorsMiddleware::class
+]);
 
 // $app->routeMiddleware([
 //     'auth' => App\Http\Middleware\Authenticate::class,

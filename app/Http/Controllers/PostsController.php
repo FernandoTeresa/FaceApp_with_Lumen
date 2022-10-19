@@ -48,17 +48,67 @@ Run -> php -S localhost:8000 -t public
 
     public function remove_by_user($post_id)
     {
+
         //erase by id
         $user = auth()->user();
         $post = Post::where(['id'=>$post_id, 'id_user' =>$user->id])->first();
+
+
+
         if ($post != null){
-            $post->delete();
+
+            if($user->id == $post->id_user){
+
+                $post->delete();
+            }else{
+
+                return response()->json([
+                    'status' => '401',
+                    'message' => 'Unauthorized Request'
+                ]);
+                
+            }
+            return response()->json('Post deleted successfully!'); 
         }else{
+
             return response()->json([
                 'status' => '404',
                 'message' => 'Not Found'
             ]);
+            
         }
-        return response()->json('Post deleted successfully!'); 
+    }
+
+
+    public function update_by_user(Request $request, $post_id){
+
+        $user = auth()->user();
+        $payload = $request->all();
+
+        $this->validate($request, [
+            'title' => 'required|string|max:100',
+            'content' => 'required',
+            'id_user' => 'required|exists:users,id'
+        ]);
+
+        $post = Post::where(['id' =>$post_id])->first();
+
+        if ($user->id === $post->id_user){
+           
+            $post->title = $request->title;
+            $post->content = $request->content;
+            $post->id_user = $request->id_user;
+
+            $post->save();
+
+            return response()->json('Post Updated successfully!');
+
+        }else{
+            return response()->json([
+                'status' => '401',
+                'message' => 'Unauthorized Request'
+            ]);
+        }
+
     }
 }
