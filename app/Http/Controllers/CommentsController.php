@@ -15,6 +15,21 @@ class CommentsController extends Controller
 
     }
 
+
+    public function get_comments_by_user($user_id)
+    {
+        //show item by id
+
+        $comments = Comment::where(['id_user'=>$user_id])->with('Posts')->with('user')->get();
+        return response()->json($comments);
+
+    }
+
+
+
+
+
+
     public function addComments(Request $request)
     {
 

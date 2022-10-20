@@ -45,12 +45,11 @@ class usersController extends Controller
         $log = auth()->user();
 
         $payload = $request->all();
-
         $this->validate($request, [
-            'password'=> ['required',Password::min(8)],
+            'password'=> [Password::min(8)],
             'raw_password' =>
             [
-                'required',
+            
                 function ($attribute, $value, $fail) use ($payload) {
 
                     if($payload['password'] != $value){
@@ -59,17 +58,27 @@ class usersController extends Controller
                 },Password::min(8)
             ],
 
-            'first_name'=> 'required|string',
-            'last_name' => 'required|string',
+            'first_name'=> 'string',
+            'last_name' => 'string',
 
         ]);
 
         if ($log->id == $user_id){
 
             $user = User::where(['id' =>$user_id])->first();
-            $user->password = Hash::make($request->password); // ??? pk nao vai para a funçao creating ou sera saving???
-            $user->first_name = $request->first_name;
-            $user->last_name = $request->last_name;
+        
+            if ($request->password != $user->password){
+                $user->password = Hash::make($request->password);
+            }
+
+            if ($request->first_name != $user->first_name){
+                $user->first_name = $request->first_name;
+            }
+
+            if ($request->last_name != $user->last_name){
+                $user->last_name = $request->last_name;
+            }
+
             $user->save();
 
             return response()->json('Profile Updated successfully!');
