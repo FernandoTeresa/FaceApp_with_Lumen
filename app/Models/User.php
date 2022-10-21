@@ -27,17 +27,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     ];
 
 
-
-    // protected static function boot()
-    // {
-    //     parent::boot();
-    
-    //     self::creating(function($model){
-    //         $model->password = Hash::make($model->password);
-    //     });
-
-    // }
-
     public function save(array $options = [])
     {
         if(isset($options['password']))
@@ -50,15 +39,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return true;
     }
 
-
-
-    // public function save($options=[])
-    // {
-    //     //make the hash from the options argument who cames by the body of the request
-    //     $this->password = Hash::make($options['raw_password']);
-
-    //     return parent::save($options);
-    // }
 
     public function getJWTIdentifier()
     {

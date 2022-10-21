@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use  App\Models\User;
+use Carbon\Carbon;
 
 class AuthController extends Controller
 {
 
 
- 
     public function login(Request $request)
     {
 
@@ -54,7 +54,7 @@ class AuthController extends Controller
         $user=User::where(['id'=>auth()->user()->id])->with('posts')->first();
         return response()->json([
             'access_token' => $token,
-            'expires_in' => auth()->factory()->getTTL() * 60 * 24
+            'expires_in' => (auth()->factory()->getTTL() * 60 * 24) + Carbon::now()->timestamp,
         ]);
     }
 }

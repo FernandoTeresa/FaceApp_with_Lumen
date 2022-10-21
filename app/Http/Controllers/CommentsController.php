@@ -26,10 +26,6 @@ class CommentsController extends Controller
     }
 
 
-
-
-
-
     public function addComments(Request $request)
     {
 

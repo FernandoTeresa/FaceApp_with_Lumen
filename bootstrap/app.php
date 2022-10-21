@@ -81,7 +81,6 @@ $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 
 
 $app->middleware([
-
     App\Http\Middleware\CorsMiddleware::class
 ]);
 
