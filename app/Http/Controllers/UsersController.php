@@ -6,8 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\File;
 
 
 class usersController extends Controller
@@ -37,8 +38,6 @@ class usersController extends Controller
         $user->save($request->all());
         return response()->json($user,200);
     }
-
-
 
     public function updateUser(Request $request, $user_id)
     {
@@ -88,9 +87,71 @@ class usersController extends Controller
                 'message' => 'Unauthorized Request'
             ]);
         };
-
-        echo '<pre>'.print_r($request,true).'</pre>';die();
     }
+
+
+    public function uploadImg(Request $request, $user_id){
+        $log = auth()->user();
+
+        if ($log->id == $user_id){
+
+            $user = User::where(['id' =>$user_id])->first();
+        
+            if($request->hasfile('photo')){
+                $original_name = $request->file('photo')->getClientOriginalName();
+                $original_name_arr = explode('.', $original_name);
+                $file_ext = end($original_name_arr);
+                //$allowedExtensions=['jpg','jpeg','png','gif'];
+
+                $path = public_path('pics/');
+                if(!File::isDirectory($path)){
+                    File::makeDirectory($path, 0777, true, true);
+                }
+
+                //$path = '/pics/'.$user_id.'/';
+                $name = 'avatar.' . $file_ext;
+                $endpath = $path.$user_id;
+                
+                if(!File::isDirectory($endpath)){
+                    File::makeDirectory($endpath, 0777, true, true);
+                }
+                if($request->file('photo')->move($endpath,$name)){
+                    
+              
+
+                    $user->photo = $endpath.'/'.$name;
+
+                    $user->save();
+
+
+                    return response()->json('Photo Uploaded successfully!');
+                }else{
+
+                    return response()->json('Cannot upload file');
+                }
+            }else{
+                return response()->json('File not found');
+            }
+
+            
+        }else{
+            return response()->json([
+                'status' => '401',
+                'message' => 'Unauthorized Request'
+            ]);
+        }
+
+    }
+
+    // public function getPic(Request $request, $user_id){
+
+    //     $user = User::where(['id'=>$user_id])->first();
+
+    //     $path =public_path().$user->photo;
+
+    //     return response()->download($path,'asdasd',[],'inline');
+
+    // }
 
 
 }

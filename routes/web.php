@@ -34,6 +34,10 @@ $app->group(['middleware'=>'jwt.verify'],function($app) {
     $app->post('/logout','AuthController@logout');//logout
     
     $app->put('/user/{user_id}', 'UsersController@updateUser');//update user
+
+    $app->post('/user/{user_id}/img','UsersController@uploadImg');//upload user photo
+
+    // $app->get('/user/{user_id}/pic','UsersController@getPic');
     
     $app->get('/auth/user','AuthController@me');//authenticate user
 

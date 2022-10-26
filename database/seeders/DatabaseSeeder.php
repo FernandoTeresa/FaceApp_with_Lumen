@@ -22,7 +22,8 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('12345'),
             'first_name' => 'Zé',
             'last_name' => 'dos Cães',
-            'email' => 'zecao@hotmail.com'
+            'email' => 'zecao@hotmail.com',
+            'photo' => ''
         ]);
       
 
@@ -31,7 +32,8 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('12345'),
             'first_name' => 'Dudu',
             'last_name' => 'dos Montes',
-            'email' => 'dudinho@hotmail.com'
+            'email' => 'dudinho@hotmail.com',
+            'photo' => ''
         ]);
 
         DB::table('users')->insert([
@@ -39,7 +41,8 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('12345'),
             'first_name' => 'Buninho',
             'last_name' => 'Cabeludo',
-            'email' => 'ponytale@hotmail.com'
+            'email' => 'ponytale@hotmail.com',
+            'photo' => ''
         ]);
 
         DB::table('users')->insert([
@@ -47,7 +50,8 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('12345'),
             'first_name' => 'Fefe',
             'last_name' => 'Oculinhos',
-            'email' => 'fefe_glass@hotmail.com'
+            'email' => 'fefe_glass@hotmail.com',
+            'photo' => ''
         ]);
 
         DB::table('posts')->insert([
