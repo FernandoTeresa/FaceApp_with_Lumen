@@ -49,14 +49,3 @@ $app->get('/posts','PostsController@getPosts'); // Request Posts
 $app->post('/login', 'AuthController@login'); //login
 $app->post('/user', 'UsersController@newUser'); // Register new user
 
-
-
-/*
-
-falta:
-    -update posts
-    -update comments
-    -delete comments
-
-
-*/

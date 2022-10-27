@@ -55,7 +55,4 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->hasMany(Post::class, 'id_user')->with('comments');
     }
 
-
-
-
 }

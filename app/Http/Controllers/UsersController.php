@@ -143,15 +143,4 @@ class usersController extends Controller
 
     }
 
-    // public function getPic(Request $request, $user_id){
-
-    //     $user = User::where(['id'=>$user_id])->first();
-
-    //     $path =public_path().$user->photo;
-
-    //     return response()->download($path,'asdasd',[],'inline');
-
-    // }
-
-
 }
